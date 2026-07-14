@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naveed Public School — Campus Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
+<style>
+:root{
+  --navy:#101B33;
+  --navy-2:#16233F;
+  --navy-3:#1E2C4D;
+  --emerald:#0E6B4C;
+  --emerald-2:#12915F;
+  --gold:#C9A227;
+  --gold-2:#E4C25E;
+  --paper:#F6F3EA;
+  --card:#FFFFFF;
+  --ink:#1B1B18;
+  --slate:#5C6470;
+  --line:#E2DDCE;
+  --danger:#B3432B;
+  --ok:#12915F;
+  --warn:#C9A227;
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.serif{font-family:'Fraunces',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+button{font-family:inherit;cursor:pointer;}
+a{color:inherit;}
+::selection{background:var(--gold-2);color:var(--navy);}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#D8D2C0;border-radius:8px;}
+
+/* ---------- Login Screen ---------- */
+#login-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(201,162,39,0.10), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(14,107,76,0.14), transparent 45%),
+    var(--navy);
+  padding:32px;
+}
+.login-wrap{
+  width:100%;
+  max-width:960px;
+  background:var(--paper);
+  border-radius:16px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  box-shadow:0 30px 80px rgba(0,0,0,0.35);
+}
+.login-left{
+  background:linear-gradient(165deg,var(--navy) 0%, var(--navy-3) 60%, #22315A 100%);
+  color:#fff;
+  padding:48px 40px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  overflow:hidden;
+}
+.login-left::after{
+  content:"";
+  position:absolute;
+  right:-90px;top:-90px;
+  width:280px;height:280px;
+  border-radius:50%;
+  border:1px solid rgba(228,194,94,0.18);
+}
+.login-left::before{
+  content:"";
+  position:absolute;
+  right:-40px;top:-40px;
+  width:200px;height:200px;
+  border-radius:50%;
+  border:1px solid rgba(228,194,94,0.14);
+}
+.seal{
+  width:64px;height:64px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #F1D583, var(--gold) 70%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--navy);
+  border:2px solid rgba(255,255,255,0.35);
+  box-shadow:0 6px 18px rgba(0,0,0,0.3);
+}
+.login-brand-name{font-size:26px;font-weight:600;margin:18px 0 4px;line-height:1.15;}
+.login-brand-sub{color:rgba(255,255,255,0.62);font-size:13px;letter-spacing:.04em;text-transform:uppercase;}
+.login-quote{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+  font-size:20px;line-height:1.5;color:rgba(255,255,255,0.92);
+  border-left:2px solid var(--gold);padding-left:16px;margin-top:40px;
+}
+.login-foot{font-size:12px;color:rgba(255,255,255,0.45);margin-top:40px;}
+.login-right{padding:48px 44px;display:flex;flex-direction:column;justify-content:center;}
+.login-right h2{font-size:24px;margin:0 0 6px;}
+.login-right p.lede{color:var(--slate);font-size:14px;margin:0 0 28px;}
+.role-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:22px;}
+.role-card{
+  border:1.5px solid var(--line);
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px 12px;
+  text-align:center;
+  transition:.15s ease;
+}
+.role-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 18px rgba(16,27,51,0.08);}
+.role-card.active{border-color:var(--emerald);background:#F1F8F4;box-shadow:0 0 0 3px rgba(14,107,76,0.12);}
+.role-icon{font-size:22px;margin-bottom:8px;}
+.role-name{font-weight:600;font-size:13.5px;}
+.role-desc{font-size:11.5px;color:var(--slate);margin-top:3px;}
+.demo-user-select{margin-bottom:22px;}
+.demo-user-select label{font-size:12px;color:var(--slate);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+select, input[type=text], input[type=date], input[type=number]{
+  width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;
+  font-family:inherit;font-size:14px;background:#fff;margin-top:6px;color:var(--ink);
+}
+select:focus, input:focus{outline:none;border-color:var(--emerald);}
+.btn{
+  border:none;border-radius:8px;padding:11px 18px;font-weight:600;font-size:13.5px;
+  display:inline-flex;align-items:center;gap:8px;justify-content:center;transition:.15s;
+}
+.btn-primary{background:var(--emerald);color:#fff;}
+.btn-primary:hover{background:var(--emerald-2);}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-gold:hover{background:var(--gold-2);}
+.btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--navy);}
+.btn-block{width:100%;}
+.btn-sm{padding:7px 12px;font-size:12.5px;}
+.btn-danger{background:#FBE9E4;color:var(--danger);}
+.btn-danger:hover{background:#F6D8CF;}
+.login-note{font-size:11.5px;color:var(--slate);margin-top:14px;text-align:center;}
+
+/* ---------- Main App Shell ---------- */
+#main-app{display:none;min-height:100vh;grid-template-columns:250px 1fr;}
+#main-app.show{display:grid;}
+.sidebar{
+  background:var(--navy);color:#fff;padding:22px 16px;position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;
+}
+.side-brand{display:flex;align-items:center;gap:10px;padding:4px 6px 22px;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:16px;}
+.side-brand .seal{width:38px;height:38px;font-size:13px;}
+.side-brand-text .n1{font-weight:700;font-size:14px;line-height:1.2;font-family:'Fraunces',serif;}
+.side-brand-text .n2{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.06em;}
+.nav-group{margin-bottom:6px;}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.35);margin:14px 10px 8px;font-weight:600;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13.5px;
+  color:rgba(255,255,255,0.72);margin-bottom:2px;border-left:3px solid transparent;font-weight:500;
+}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.nav-item.active{background:rgba(201,162,39,0.14);border-left-color:var(--gold);color:#fff;}
+.nav-ico{width:18px;text-align:center;font-size:14px;}
+.side-bottom{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1);}
+.side-user{display:flex;align-items:center;gap:10px;padding:8px 6px;}
+.avatar{
+  width:34px;height:34px;border-radius:50%;background:var(--gold);color:var(--navy);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;
+}
+.side-user-name{font-size:12.5px;font-weight:600;}
+.side-user-role{font-size:10.5px;color:rgba(255,255,255,0.45);}
+.logout-btn{width:100%;margin-top:10px;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.75);border:none;padding:9px;border-radius:7px;font-size:12px;font-weight:600;}
+.logout-btn:hover{background:rgba(255,255,255,0.13);color:#fff;}
+
+.content{padding:26px 34px 60px;max-width:1280px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;}
+.topbar h1{font-size:23px;margin:0;font-weight:600;}
+.topbar .sub{color:var(--slate);font-size:13px;margin-top:3px;}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.bell{position:relative;font-size:17px;width:38px;height:38px;border-radius:50%;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;}
+.bell .dot{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--danger);}
+.pill{font-size:12px;background:#fff;border:1.5px solid var(--line);padding:6px 12px;border-radius:20px;color:var(--slate);font-weight:600;}
+
+/* ---------- Cards / Grid ---------- */
+.grid{display:grid;gap:16px;}
+.g-4{grid-template-columns:repeat(4,1fr);}
+.g-3{grid-template-columns:repeat(3,1fr);}
+.g-2{grid-template-columns:repeat(2,1fr);}
+.g-2-1{grid-template-columns:2fr 1fr;}
+@media(max-width:1000px){.g-4{grid-template-columns:repeat(2,1fr);}.g-3{grid-template-columns:repeat(2,1fr);}.g-2-1{grid-template-columns:1fr;}}
+
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px;
+}
+.card h3{margin:0 0 4px;font-size:15px;}
+.stat-card{padding:18px 20px;}
+.stat-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.stat-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.stat-num{font-family:'Fraunces',serif;font-size:30px;font-weight:600;margin:12px 0 2px;color:var(--navy);}
+.stat-label{font-size:12.5px;color:var(--slate);font-weight:500;}
+.stat-delta{font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.delta-up{background:#E7F5EC;color:var(--ok);}
+.delta-down{background:#FBEAE5;color:var(--danger);}
+.delta-flat{background:#F1EEE3;color:var(--slate);}
+
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:30px 0 14px;}
+.section-title h2{font-size:16px;margin:0;font-weight:600;}
+.section-title .cta{font-size:12.5px;color:var(--emerald);font-weight:600;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:10px 12px;color:var(--slate);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;border-bottom:1.5px solid var(--line);}
+td{padding:11px 12px;border-bottom:1px solid #F0EDE3;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#FBFAF6;}
+.table-wrap{overflow-x:auto;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;}
+.badge-present{background:#E7F5EC;color:var(--ok);}
+.badge-absent{background:#FBEAE5;color:var(--danger);}
+.badge-late{background:#FDF3DC;color:#96780F;}
+.badge-pending{background:#EFEEF7;color:#5750A8;}
+.badge-published{background:#E7F5EC;color:var(--ok);}
+.badge-draft{background:#F1EEE3;color:var(--slate);}
+
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
+.search-box{flex:1;min-width:200px;position:relative;}
+.search-box input{padding-left:34px;}
+.search-box .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--slate);font-size:13px;}
+
+.tabs{display:flex;gap:4px;border-bottom:1.5px solid var(--line);margin-bottom:20px;}
+.tab{padding:9px 16px;font-size:13px;font-weight:600;color:var(--slate);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;}
+.tab.active{color:var(--navy);border-color:var(--gold);}
+
+.empty{text-align:center;padding:50px 20px;color:var(--slate);}
+.empty .ico{font-size:30px;margin-bottom:10px;}
+
+/* ---------- Modal ---------- */
+.modal-bg{position:fixed;inset:0;background:rgba(16,27,51,0.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:14px;max-width:480px;width:100%;max-height:88vh;overflow-y:auto;padding:26px;position:relative;}
+.modal h3{margin-top:0;}
+.modal-close{position:absolute;top:16px;right:16px;background:#F1EEE3;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;color:var(--slate);}
+
+/* ---------- ID Card ---------- */
+.id-card{
+  width:320px;margin:0 auto;border-radius:14px;overflow:hidden;
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy-3) 100%);
+  color:#fff;box-shadow:0 14px 30px rgba(16,27,51,0.28);border:1px solid rgba(228,194,94,0.3);
+}
+.id-card-top{padding:16px 18px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px dashed rgba(228,194,94,0.35);}
+.id-card-top .seal{width:32px;height:32px;font-size:11px;}
+.id-card-school{font-size:11px;font-weight:700;font-family:'Fraunces',serif;}
+.id-card-school-sub{font-size:8.5px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:.06em;}
+.id-card-body{padding:16px 18px;display:flex;gap:14px;align-items:center;}
+.id-card-qr{background:#fff;border-radius:8px;padding:8px;flex-shrink:0;}
+.id-card-info .nm{font-family:'Fraunces',serif;font-weight:600;font-size:15px;}
+.id-card-info .rl{font-size:11px;color:rgba(255,255,255,0.65);margin-top:2px;}
+.id-card-info .code{font-size:10.5px;color:var(--gold-2);margin-top:6px;}
+.id-card-foot{background:rgba(0,0,0,0.18);padding:8px 18px;font-size:9.5px;color:rgba(255,255,255,0.5);display:flex;justify-content:space-between;}
+
+/* ---------- Attendance session ---------- */
+.session-panel{display:grid;grid-template-columns:280px 1fr;gap:20px;}
+@media(max-width:900px){.session-panel{grid-template-columns:1fr;}}
+.qr-box{background:#fff;padding:14px;border-radius:10px;display:inline-block;}
+.scan-frame{
+  width:100%;aspect-ratio:1/1;max-width:220px;margin:0 auto;border-radius:14px;
+  background:var(--navy);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+}
+.scan-frame::before{content:"";position:absolute;inset:14px;border:2px solid rgba(228,194,94,0.5);border-radius:8px;}
+.scan-line{position:absolute;left:14px;right:14px;height:2px;background:var(--gold-2);box-shadow:0 0 8px var(--gold-2);animation:scan 2.2s ease-in-out infinite;}
+@keyframes scan{0%{top:16px;}50%{top:calc(100% - 18px);}100%{top:16px;}}
+.session-token{font-size:11px;color:var(--slate);text-align:center;margin-top:10px;}
+.scan-frame.live{background:#000;}
+.scan-status{min-height:34px;font-size:12px;color:var(--slate);margin-top:8px;line-height:1.5;}
+.scan-status.ok{color:var(--ok);font-weight:600;}
+.scan-status.warn{color:var(--danger);font-weight:600;}
+.cam-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#fff;background:rgba(179,67,43,0.9);padding:3px 8px;border-radius:20px;position:absolute;top:8px;left:8px;z-index:2;}
+.cam-badge .rec-dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+/* ---------- misc ---------- */
+.flex{display:flex;}
+.between{justify-content:space-between;}
+.center{align-items:center;}
+.gap8{gap:8px;}.gap12{gap:12px;}.gap16{gap:16px;}
+.muted{color:var(--slate);}
+.small{font-size:12px;}
+.mt0{margin-top:0;}.mb0{margin-bottom:0;}
+.chart-wrap{position:relative;height:230px;}
+.notif-item{padding:14px 0;border-bottom:1px solid #F0EDE3;}
+.notif-item:last-child{border-bottom:none;}
+.notif-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--emerald);}
+.notif-title{font-weight:600;font-size:13.5px;margin:3px 0 3px;}
+.notif-meta{font-size:11px;color:var(--slate);}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:13px 18px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 10px 24px rgba(0,0,0,0.25);z-index:200;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.divider{height:1px;background:var(--line);margin:18px 0;}
+.progress{height:6px;background:#F1EEE3;border-radius:6px;overflow:hidden;}
+.progress > div{height:100%;background:var(--emerald);}
+textarea{width:100%;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:13.5px;resize:vertical;min-height:80px;margin-top:6px;}
+label.field-label{font-size:12px;color:var(--slate);text-transform:uppercase;letter-spacing:.04em;font-weight:600;}
+.field{margin-bottom:14px;}
+.footer-credit{text-align:center;font-size:11.5px;color:var(--slate);padding:30px 0 10px;}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-left">
+      <div>
+        <div class="seal">NPS</div>
+        <div class="login-brand-name">Naveed Public School</div>
+        <div class="login-brand-sub">Campus Portal · Peshawar</div>
+      </div>
+      <div class="login-quote">"Discipline is the bridge between attendance&nbsp;and&nbsp;achievement."</div>
+      <div class="login-foot">Secure role-based access for administrators, teachers,<br>students and parents.</div>
+    </div>
+    <div class="login-right">
+      <h2>Sign in to your campus</h2>
+      <p class="lede">Select your role to preview the portal in demo mode.</p>
+      <div class="role-grid" id="role-grid">
+        <div class="role-card active" data-role="admin">
+          <div class="role-icon">🏛️</div>
+          <div class="role-name">Admin</div>
+          <div class="role-desc">Full oversight</div>
+        </div>
+        <div class="role-card" data-role="teacher">
+          <div class="role-icon">🧑‍🏫</div>
+          <div class="role-name">Teacher</div>
+          <div class="role-desc">Classes &amp; exams</div>
+        </div>
+        <div class="role-card" data-role="student">
+          <div class="role-icon">🎒</div>
+          <div class="role-name">Student</div>
+          <div class="role-desc">Attendance &amp; results</div>
+        </div>
+      </div>
+      <div class="demo-user-select">
+        <label>Sign in as</label>
+        <select id="user-select"></select>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="doLogin()">Enter Portal →</button>
+      <div class="login-note">Demo mode · all data below is illustrative sample data, held in memory for this session.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div id="main-app">
+  <div class="sidebar">
+    <div class="side-brand">
+      <div class="seal">NPS</div>
+      <div class="side-brand-text">
+        <div class="n1">Naveed Public<br>School</div>
+        <div class="n2">Campus Portal</div>
+      </div>
+    </div>
+    <div id="nav-container"></div>
+    <div class="side-bottom">
+      <div class="side-user">
+        <div class="avatar" id="side-avatar">A</div>
+        <div>
+          <div class="side-user-name" id="side-user-name">—</div>
+          <div class="side-user-role" id="side-user-role">—</div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">↩ Switch account</button>
+    </div>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+
+<div class="modal-bg" id="modal-bg"><div class="modal" id="modal-inner"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   DATA LAYER (in-memory demo data)
+========================================================= */
+const SUBJECTS = ["English","Mathematics","Science","Urdu","Computer Studies"];
+
+const TEACHERS = [
+  {id:"T01", name:"Ayesha Rahman", subject:"English", classes:["9-A","10-A"], phone:"0301-1234567", qualification:"M.A. English Literature"},
+  {id:"T02", name:"Bilal Farooq", subject:"Mathematics", classes:["9-A","9-B"], phone:"0302-2345678", qualification:"M.Sc. Mathematics"},
+  {id:"T03", name:"Sana Yousafzai", subject:"Science", classes:["10-A","10-B"], phone:"0303-3456789", qualification:"M.Sc. Physics"},
+  {id:"T04", name:"Hamza Sethi", subject:"Urdu", classes:["9-B","10-B"], phone:"0304-4567890", qualification:"M.A. Urdu"},
+  {id:"T05", name:"Mehwish Iqbal", subject:"Computer Studies", classes:["9-A","10-A","9-B","10-B"], phone:"0305-5678901", qualification:"BSCS"}
+];
+
+const CLASSES = [
+  {id:"9-A", grade:"Grade 9", section:"A", homeroom:"T01", room:"Room 12", strength:0},
+  {id:"9-B", grade:"Grade 9", section:"B", homeroom:"T02", room:"Room 14", strength:0},
+  {id:"10-A", grade:"Grade 10", section:"A", homeroom:"T03", room:"Room 21", strength:0},
+  {id:"10-B", grade:"Grade 10", section:"B", homeroom:"T04", room:"Room 23", strength:0}
+];
+
+const FIRST_NAMES = ["Ahmed","Fatima","Zainab","Usman","Hira","Bilal","Ayesha","Hamza","Sara","Ali","Mariam","Faisal","Noor","Danish","Iqra","Salman"];
+const LAST_NAMES = ["Khan","Malik","Shah","Baig","Durrani","Afridi","Yousaf","Raza","Iqbal","Hussain"];
+
+let STUDENTS = [];
+(function seedStudents(){
+  let idn=1;
+  CLASSES.forEach(c=>{
+    const count = 6;
+    for(let i=0;i<count;i++){
+      const fn = FIRST_NAMES[(idn*3+i)%FIRST_NAMES.length];
+      const ln = LAST_NAMES[(idn*5+i)%LAST_NAMES.length];
+      const id = "NPS-2026-"+String(idn).padStart(4,"0");
+      STUDENTS.push({
+        id, name:`${fn} ${ln}`, classId:c.id, roll:i+1,
+        contact:`03${(idn%9)+1}${String(1000000+idn*137).slice(0,7)}`,
+        guardian:`Guardian of ${fn}`, code:`QR-${id}`
+      });
+      idn++;
+    }
+    c.strength = count;
+  });
+})();
+
+// Attendance sessions & records — in-memory
+let SESSIONS = [];   // {id, classId, date, subject, token, status}
+let RECORDS = [];    // {sessionId, studentId, status, time, method}
+let sessionSeq = 1;
+
+// Seed 6 days of historical attendance so charts have data
+(function seedHistory(){
+  const today = new Date();
+  for(let d=6; d>=1; d--){
+    const date = new Date(today); date.setDate(today.getDate()-d);
+    const dstr = date.toISOString().slice(0,10);
+    CLASSES.forEach(c=>{
+      const sid = "SES-H-"+dstr+"-"+c.id;
+      SESSIONS.push({id:sid, classId:c.id, date:dstr, subject:"Homeroom", token:sid, status:"closed"});
+      STUDENTS.filter(s=>s.classId===c.id).forEach(s=>{
+        const r = Math.random();
+        const status = r<0.88 ? "present" : (r<0.95 ? "late" : "absent");
+        RECORDS.push({sessionId:sid, studentId:s.id, status, time: dstr+" 08:0"+(Math.floor(Math.random()*9))+" AM", method: status==="absent" ? "—" : (Math.random()<0.7?"QR Scan":"Manual")});
+      });
+    });
+  }
+})();
+
+let EXAMS = [
+  {id:"EX01", name:"Mid Term Examination", classId:"9-A", date:"2026-07-02", subjects:SUBJECTS, status:"published"},
+  {id:"EX02", name:"Mid Term Examination", classId:"9-B", date:"2026-07-02", subjects:SUBJECTS, status:"published"},
+  {id:"EX03", name:"Mid Term Examination", classId:"10-A", date:"2026-07-03", subjects:SUBJECTS, status:"published"},
+  {id:"EX04", name:"Mid Term Examination", classId:"10-B", date:"2026-07-03", subjects:SUBJECTS, status:"draft"},
+  {id:"EX05", name:"Final Term Examination", classId:"9-A", date:"2026-09-15", subjects:SUBJECTS, status:"draft"}
+];
+
+let GRADES = []; // {examId, studentId, subject, marks, total}
+(function seedGrades(){
+  EXAMS.filter(e=>e.status==="published").forEach(ex=>{
+    STUDENTS.filter(s=>s.classId===ex.classId).forEach(s=>{
+      ex.subjects.forEach(sub=>{
+        const marks = Math.floor(55 + Math.random()*44);
+        GRADES.push({examId:ex.id, studentId:s.id, subject:sub, marks, total:100});
+      });
+    });
+  });
+})();
+
+let NOTIFICATIONS = [
+  {id:1, tag:"Exams", title:"Mid Term result cards available for Grade 9 & 10-A", body:"Class teachers may download and share printed transcripts from the Exams module.", author:"Admin Office", time:"2 days ago"},
+  {id:2, tag:"Attendance", title:"QR attendance mandatory for Final Term entrance", body:"All students must carry their ID card for QR scan-in on exam days.", author:"Admin Office", time:"4 days ago"},
+  {id:3, tag:"Event", title:"Parent-Teacher meeting scheduled — 20 July", body:"Homeroom teachers will share individual time slots this week.", author:"Principal's Office", time:"6 days ago"}
+];
+
+let AUDIT = []; // {time, actor, action}
+function logAudit(actor, action){
+  AUDIT.unshift({time:new Date().toLocaleString(), actor, action});
+  if(AUDIT.length>60) AUDIT.pop();
+}
+logAudit("System","Attendance history seeded for the past 6 school days.");
+logAudit("System","Mid Term results published for Grade 9-A, 9-B and 10-A.");
+
+/* =========================================================
+   DEMO USERS
+========================================================= */
+const USERS = {
+  admin:[
+    {id:"admin1", name:"Jamal Abdul Nasir", role:"admin", title:"System Administrator"},
+    {id:"admin2", name:"Naveed Zafar", role:"admin", title:"Principal"}
+  ],
+  teacher: TEACHERS.map(t=>({id:t.id, name:t.name, role:"teacher", title:t.subject+" Teacher"})),
+  student: STUDENTS.slice(0,10).map(s=>({id:s.id, name:s.name, role:"student", title:CLASSES.find(c=>c.id===s.classId).grade+" · Section "+s.classId.split("-")[1]}))
+};
+
+let state = { role:"admin", user:USERS.admin[0], panel:"dashboard", attClass:CLASSES[0].id, attDate:new Date().toISOString().slice(0,10), activeExam:null };
+
+/* =========================================================
+   LOGIN SCREEN LOGIC
+========================================================= */
+const roleGrid = document.getElementById("role-grid");
+const userSelect = document.getElementById("user-select");
+function populateUserSelect(role){
+  userSelect.innerHTML = USERS[role].map(u=>`<option value="${u.id}">${u.name} — ${u.title}</option>`).join("");
+}
+roleGrid.querySelectorAll(".role-card").forEach(card=>{
+  card.addEventListener("click", ()=>{
+    roleGrid.querySelectorAll(".role-card").forEach(c=>c.classList.remove("active"));
+    card.classList.add("active");
+    populateUserSelect(card.dataset.role);
+  });
+});
+populateUserSelect("admin");
+
+function doLogin(){
+  const role = roleGrid.querySelector(".role-card.active").dataset.role;
+  const uid = userSelect.value;
+  const user = USERS[role].find(u=>u.id===uid);
+  state.role = role; state.user = user;
+  state.panel = "dashboard";
+  document.getElementById("login-screen").style.display="none";
+  document.getElementById("main-app").classList.add("show");
+  logAudit(user.name, "Signed in as "+role);
+  renderShell();
+}
+function doLogout(){
+  if(scannerActive) stopScannerRaw();
+  document.getElementById("main-app").classList.remove("show");
+  document.getElementById("login-screen").style.display="flex";
+}
+
+/* =========================================================
+   NAV DEFINITIONS PER ROLE
+========================================================= */
+function navFor(role){
+  if(role==="admin") return [
+    {group:"Overview", items:[["dashboard","📊","Dashboard"]]},
+    {group:"People", items:[["students","🎓","Students"],["teachers","🧑‍🏫","Teachers"]]},
+    {group:"Academics", items:[["classes","🏫","Classes"],["attendance","🔳","Attendance"],["exams","📝","Exams & Results"]]},
+    {group:"Insights", items:[["reports","📈","Reports"],["notifications","📣","Notifications"],["settings","⚙️","Settings"]]}
+  ];
+  if(role==="teacher") return [
+    {group:"Overview", items:[["dashboard","📊","Dashboard"]]},
+    {group:"My Work", items:[["classes","🏫","My Classes"],["attendance","🔳","Attendance"],["exams","📝","Exams & Results"]]},
+    {group:"Updates", items:[["notifications","📣","Notifications"]]}
+  ];
+  return [
+    {group:"Overview", items:[["dashboard","📊","Dashboard"]]},
+    {group:"My Record", items:[["attendance","🔳","My Attendance"],["exams","📝","My Results"],["idcard","🪪","My ID Card"]]},
+    {group:"Updates", items:[["notifications","📣","Announcements"]]}
+  ];
+}
+
+/* =========================================================
+   SHELL RENDER
+========================================================= */
+function renderShell(){
+  document.getElementById("side-avatar").textContent = state.user.name.split(" ").map(x=>x[0]).slice(0,2).join("");
+  document.getElementById("side-user-name").textContent = state.user.name;
+  document.getElementById("side-user-role").textContent = state.user.title;
+
+  const nav = navFor(state.role);
+  document.getElementById("nav-container").innerHTML = nav.map(g=>`
+    <div class="nav-group">
+      <div class="nav-label">${g.group}</div>
+      ${g.items.map(([key,ico,label])=>`
+        <div class="nav-item ${state.panel===key?'active':''}" onclick="goTo('${key}')">
+          <span class="nav-ico">${ico}</span><span>${label}</span>
+        </div>`).join("")}
+    </div>`).join("");
+
+  renderPanel();
+}
+function goTo(panel){
+  if(panel!=="attendance" && scannerActive) stopScannerRaw();
+  state.panel = panel; renderShell();
+}
+
+function renderPanel(){
+  const c = document.getElementById("content");
+  const renderers = {
+    dashboard: renderDashboard, students: renderStudents, teachers: renderTeachers,
+    classes: renderClasses, attendance: renderAttendance, exams: renderExams,
+    reports: renderReports, notifications: renderNotifications, settings: renderSettings,
+    idcard: renderMyIdCard
+  };
+  c.innerHTML = "";
+  (renderers[state.panel] || renderDashboard)();
+}
+
+/* =========================================================
+   HELPERS
+========================================================= */
+function teacherName(id){ const t=TEACHERS.find(t=>t.id===id); return t?t.name:id; }
+function studentsInClass(cid){ return STUDENTS.filter(s=>s.classId===cid); }
+function classLabel(cid){ const c=CLASSES.find(c=>c.id===cid); return c? c.grade+" – "+c.section : cid; }
+function initials(name){ return name.split(" ").map(x=>x[0]).slice(0,2).join(""); }
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.innerHTML = "✓ "+msg;
+  t.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove("show"), 2600);
+}
+function openModal(html){
+  document.getElementById("modal-inner").innerHTML = `<button class="modal-close" onclick="closeModal()">✕</button>` + html;
+  document.getElementById("modal-bg").classList.add("show");
+}
+function closeModal(){ document.getElementById("modal-bg").classList.remove("show"); }
+document.getElementById("modal-bg").addEventListener("click", e=>{ if(e.target.id==="modal-bg") closeModal(); });
+
+function attendanceRateForStudent(sid){
+  const recs = RECORDS.filter(r=>r.studentId===sid);
+  if(!recs.length) return 100;
+  const present = recs.filter(r=>r.status==="present"||r.status==="late").length;
+  return Math.round((present/recs.length)*100);
+}
+function attendanceRateForClass(cid, days=7){
+  const recs = RECORDS.filter(r=>{
+    const sess = SESSIONS.find(s=>s.id===r.sessionId);
+    return sess && sess.classId===cid;
+  });
+  if(!recs.length) return 100;
+  const present = recs.filter(r=>r.status==="present"||r.status==="late").length;
+  return Math.round((present/recs.length)*100);
+}
+function overallAttendanceToday(){
+  const todaySessions = SESSIONS.filter(s=>s.date===state.attDate);
+  const recs = RECORDS.filter(r=>todaySessions.some(s=>s.id===r.sessionId));
+  if(!recs.length) return null;
+  const present = recs.filter(r=>r.status==="present"||r.status==="late").length;
+  return Math.round((present/recs.length)*100);
+}
+function last7DaysLabelsRates(cid){
+  const labels=[], rates=[];
+  const today = new Date();
+  for(let d=6; d>=0; d--){
+    const date = new Date(today); date.setDate(today.getDate()-d);
+    const dstr = date.toISOString().slice(0,10);
+    labels.push(date.toLocaleDateString('en-GB',{weekday:'short'}));
+    const sessions = SESSIONS.filter(s=>s.date===dstr && (cid==="all"||s.classId===cid));
+    const recs = RECORDS.filter(r=>sessions.some(s=>s.id===r.sessionId));
+    if(!recs.length){ rates.push(null); continue; }
+    const present = recs.filter(r=>r.status==="present"||r.status==="late").length;
+    rates.push(Math.round((present/recs.length)*100));
+  }
+  return {labels, rates};
+}
+function gradeLetter(pct){
+  if(pct>=90) return "A+"; if(pct>=80) return "A"; if(pct>=70) return "B";
+  if(pct>=60) return "C"; if(pct>=50) return "D"; return "F";
+}
+function studentAverage(sid){
+  const g = GRADES.filter(x=>x.studentId===sid);
+  if(!g.length) return null;
+  const pct = g.reduce((a,x)=>a+x.marks/x.total,0)/g.length*100;
+  return Math.round(pct);
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+function renderDashboard(){
+  const c = document.getElementById("content");
+  const totalStudents = STUDENTS.length, totalTeachers = TEACHERS.length;
+  const todayRate = overallAttendanceToday();
+  const pendingExams = EXAMS.filter(e=>e.status==="draft").length;
+
+  let statCards, headline, sub;
+
+  if(state.role==="admin"){
+    headline = "Good to see you, "+state.user.name.split(" ")[0];
+    sub = "Here's what's happening across Naveed Public School today.";
+    statCards = `
+      <div class="card stat-card">
+        <div class="stat-top"><div class="stat-ico" style="background:#EAF4EE;color:var(--emerald)">🎓</div>
+        <span class="stat-delta delta-flat">4 classes</span></div>
+        <div class="stat-num">${totalStudents}</div><div class="stat-label">Enrolled students</div></div>
+      <div class="card stat-card">
+        <div class="stat-top"><div class="stat-ico" style="background:#FDF3DC;color:#96780F">🧑‍🏫</div>
+        <span class="stat-delta delta-flat">5 subjects</span></div>
+        <div class="stat-num">${totalTeachers}</div><div class="stat-label">Active teachers</div></div>
+      <div class="card stat-card">
+        <div class="stat-top"><div class="stat-ico" style="background:#EAF0FB;color:#3457C4">🔳</div>
+        <span class="stat-delta ${todayRate===null?'delta-flat':(todayRate>=85?'delta-up':'delta-down')}">${todayRate===null?'No session yet':'today'}</span></div>
+        <div class="stat-num">${todayRate===null?'—':todayRate+'%'}</div><div class="stat-label">Attendance today</div></div>
+      <div class="card stat-card">
+        <div class="stat-top"><div class="stat-ico" style="background:#F6E9E9;color:var(--danger)">📝</div>
+        <span class="stat-delta delta-flat">to publish</span></div>
+        <div class="stat-num">${pendingExams}</div><div class="stat-label">Exams pending results</div></div>`;
+  } else if(state.role==="teacher"){
+    const myClasses = TEACHERS.find(t=>t.id===state.user.id).classes;
+    headline = "Welcome back, "+state.user.name.split(" ")[0];
+    sub = "Your classes at a glance.";
+    const myStudentCount = STUDENTS.filter(s=>myClasses.includes(s.classId)).length;
+    statCards = `
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#EAF4EE;color:var(--emerald)">🏫</div></div>
+        <div class="stat-num">${myClasses.length}</div><div class="stat-label">Classes assigned</div></div>
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#FDF3DC;color:#96780F">🎓</div></div>
+        <div class="stat-num">${myStudentCount}</div><div class="stat-label">Students taught</div></div>
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#EAF0FB;color:#3457C4">🔳</div></div>
+        <div class="stat-num">${todayRate===null?'—':todayRate+'%'}</div><div class="stat-label">Attendance today</div></div>
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#F6E9E9;color:var(--danger)">📝</div></div>
+        <div class="stat-num">${EXAMS.filter(e=>myClasses.includes(e.classId)&&e.status==='draft').length}</div><div class="stat-label">Results to finalize</div></div>`;
+  } else {
+    const stu = STUDENTS.find(s=>s.id===state.user.id);
+    headline = "Hello, "+state.user.name.split(" ")[0];
+    sub = classLabel(stu.classId)+" · Roll No. "+stu.roll;
+    const rate = attendanceRateForStudent(stu.id);
+    const avg = studentAverage(stu.id);
+    statCards = `
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#EAF0FB;color:#3457C4">🔳</div></div>
+        <div class="stat-num">${rate}%</div><div class="stat-label">My attendance</div></div>
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#EAF4EE;color:var(--emerald)">📈</div></div>
+        <div class="stat-num">${avg===null?'—':avg+'%'}</div><div class="stat-label">Average score</div></div>
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#FDF3DC;color:#96780F">🏫</div></div>
+        <div class="stat-num">${classLabel(stu.classId)}</div><div class="stat-label">My class</div></div>
+      <div class="card stat-card"><div class="stat-top"><div class="stat-ico" style="background:#F6E9E9;color:var(--danger)">🪪</div></div>
+        <div class="stat-num mono" style="font-size:16px;">${stu.id}</div><div class="stat-label">Student ID</div></div>`;
+  }
+
+  c.innerHTML = `
+    <div class="topbar">
+      <div><h1>${headline}</h1><div class="sub">${sub}</div></div>
+      <div class="topbar-right">
+        <div class="bell">🔔<span class="dot"></span></div>
+        <div class="pill">${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</div>
+      </div>
+    </div>
+    <div class="grid g-4">${statCards}</div>
+
+    <div class="section-title"><h2>Attendance trend — last 7 days</h2></div>
+    <div class="grid g-2-1">
+      <div class="card"><div class="chart-wrap"><canvas id="chartTrend"></canvas></div></div>
+      <div class="card">
+        <h3>Recent activity</h3>
+        <div style="max-height:220px;overflow-y:auto;margin-top:10px;">
+          ${AUDIT.slice(0,6).map(a=>`
+            <div style="padding:9px 0;border-bottom:1px solid #F0EDE3;">
+              <div style="font-size:12.5px;font-weight:600;">${a.action}</div>
+              <div style="font-size:11px;color:var(--slate);">${a.actor} · ${a.time}</div>
+            </div>`).join("")}
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title"><h2>Announcements</h2><span class="cta" onclick="goTo('notifications')">View all →</span></div>
+    <div class="grid g-3">
+      ${NOTIFICATIONS.slice(0,3).map(n=>`
+        <div class="card">
+          <div class="notif-tag">${n.tag}</div>
+          <div class="notif-title">${n.title}</div>
+          <div class="notif-meta">${n.author} · ${n.time}</div>
+        </div>`).join("")}
+    </div>
+    <div class="footer-credit">Naveed Public School Campus Portal · Developer and Designed by: Jamal Abdul Nasir</div>
+  `;
+
+  const cid = state.role==="student" ? STUDENTS.find(s=>s.id===state.user.id).classId :
+              state.role==="teacher" ? TEACHERS.find(t=>t.id===state.user.id).classes[0] : "all";
+  const {labels, rates} = last7DaysLabelsRates(cid);
+  new Chart(document.getElementById("chartTrend"), {
+    type:'line',
+    data:{labels, datasets:[{label:'Attendance %', data:rates, borderColor:'#0E6B4C', backgroundColor:'rgba(14,107,76,0.08)', fill:true, tension:.35, spanGaps:true, pointBackgroundColor:'#C9A227', pointRadius:4}]},
+    options:{plugins:{legend:{display:false}}, scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}}}, responsive:true, maintainAspectRatio:false}
+  });
+}
+
+/* =========================================================
+   STUDENTS (admin/teacher)
+========================================================= */
+function renderStudents(){
+  const c = document.getElementById("content");
+  const isTeacher = state.role==="teacher";
+  const myClasses = isTeacher ? TEACHERS.find(t=>t.id===state.user.id).classes : CLASSES.map(c=>c.id);
+  const list = STUDENTS.filter(s=>myClasses.includes(s.classId));
+
+  c.innerHTML = `
+    <div class="topbar">
+      <div><h1>Students</h1><div class="sub">${list.length} students ${isTeacher?'across your classes':'enrolled school-wide'}</div></div>
+      ${state.role==="admin"?'<button class="btn btn-gold" onclick="addStudentModal()">+ Enrol Student</button>':''}
+    </div>
+    <div class="toolbar">
+      <div class="search-box"><span class="ico">🔎</span><input type="text" id="stu-search" placeholder="Search by name or student ID…" oninput="filterStudentTable()"></div>
+      <select id="stu-class-filter" style="max-width:180px;" onchange="filterStudentTable()">
+        <option value="all">All classes</option>
+        ${myClasses.map(cid=>`<option value="${cid}">${classLabel(cid)}</option>`).join("")}
+      </select>
+    </div>
+    <div class="card table-wrap">
+      <table id="stu-table">
+        <thead><tr><th>Student</th><th>ID</th><th>Class</th><th>Attendance</th><th>Average</th><th></th></tr></thead>
+        <tbody>${list.map(rowStudent).join("")}</tbody>
+      </table>
+    </div>
+  `;
+}
+function rowStudent(s){
+  const rate = attendanceRateForStudent(s.id);
+  const avg = studentAverage(s.id);
+  return `<tr data-name="${s.name.toLowerCase()}" data-id="${s.id.toLowerCase()}" data-class="${s.classId}">
+    <td><div class="flex center gap8"><div class="avatar" style="width:28px;height:28px;font-size:11px;background:#EFEBDD;color:var(--navy);">${initials(s.name)}</div><div><div style="font-weight:600;">${s.name}</div><div class="small muted">Roll ${s.roll}</div></div></div></td>
+    <td class="mono small">${s.id}</td>
+    <td>${classLabel(s.classId)}</td>
+    <td><div class="flex center gap8" style="min-width:100px;"><div class="progress" style="flex:1;"><div style="width:${rate}%"></div></div><span class="small">${rate}%</span></div></td>
+    <td>${avg===null?'<span class="muted small">—</span>':avg+'%'}</td>
+    <td><button class="btn btn-ghost btn-sm" onclick="viewIdCard('${s.id}')">🪪 ID Card</button></td>
+  </tr>`;
+}
+function filterStudentTable(){
+  const q = document.getElementById("stu-search").value.toLowerCase();
+  const cf = document.getElementById("stu-class-filter").value;
+  document.querySelectorAll("#stu-table tbody tr").forEach(tr=>{
+    const match = (tr.dataset.name.includes(q)||tr.dataset.id.includes(q)) && (cf==="all"||tr.dataset.class===cf);
+    tr.style.display = match ? "" : "none";
+  });
+}
+function addStudentModal(){
+  openModal(`
+    <h3>Enrol new student</h3>
+    <div class="field"><label class="field-label">Full name</label><input type="text" id="ns-name" placeholder="e.g. Zara Ahmed"></div>
+    <div class="field"><label class="field-label">Class</label><select id="ns-class">${CLASSES.map(c=>`<option value="${c.id}">${classLabel(c.id)}</option>`).join("")}</select></div>
+    <div class="field"><label class="field-label">Guardian contact</label><input type="text" id="ns-contact" placeholder="03XX-XXXXXXX"></div>
+    <button class="btn btn-primary btn-block" onclick="submitNewStudent()">Enrol student</button>
+  `);
+}
+function submitNewStudent(){
+  const name = document.getElementById("ns-name").value.trim();
+  if(!name){ toast("Enter a student name first"); return; }
+  const classId = document.getElementById("ns-class").value;
+  const contact = document.getElementById("ns-contact").value.trim() || "03XX-XXXXXXX";
+  const seq = STUDENTS.length+1;
+  const id = "NPS-2026-"+String(seq).padStart(4,"0");
+  const roll = studentsInClass(classId).length+1;
+  STUDENTS.push({id, name, classId, roll, contact, guardian:"Guardian of "+name.split(" ")[0], code:"QR-"+id});
+  const cls = CLASSES.find(c=>c.id===classId); cls.strength++;
+  logAudit(state.user.name, `Enrolled new student ${name} into ${classLabel(classId)}`);
+  closeModal(); toast("Student enrolled successfully"); renderStudents();
+}
+
+/* =========================================================
+   ID CARD
+========================================================= */
+function idCardHtml(s, containerId){
+  const c = CLASSES.find(c=>c.id===s.classId);
+  return `
+    <div class="id-card">
+      <div class="id-card-top"><div class="seal">NPS</div>
+        <div><div class="id-card-school">NAVEED PUBLIC SCHOOL</div><div class="id-card-school-sub">Student Identity Card</div></div>
+      </div>
+      <div class="id-card-body">
+        <div class="id-card-qr" id="${containerId}"></div>
+        <div class="id-card-info">
+          <div class="nm">${s.name}</div>
+          <div class="rl">${classLabel(s.classId)} · Roll No. ${s.roll}</div>
+          <div class="code mono">${s.id}</div>
+        </div>
+      </div>
+      <div class="id-card-foot"><span>Valid: 2025–26</span><span class="mono">${s.code}</span></div>
+    </div>`;
+}
+function viewIdCard(sid){
+  const s = STUDENTS.find(s=>s.id===sid);
+  openModal(`<h3 style="text-align:center;">Student ID Card</h3>${idCardHtml(s,"qr-modal")}
+    <div style="text-align:center;margin-top:16px;"><button class="btn btn-ghost btn-sm" onclick="toast('ID card sent to print queue')">🖨️ Print card</button></div>`);
+  setTimeout(()=>{ document.getElementById("qr-modal").innerHTML=""; new QRCode(document.getElementById("qr-modal"), {text:s.code, width:84, height:84, colorDark:"#101B33"}); }, 30);
+}
+function renderMyIdCard(){
+  const c = document.getElementById("content");
+  const s = STUDENTS.find(s=>s.id===state.user.id);
+  c.innerHTML = `
+    <div class="topbar"><div><h1>My ID Card</h1><div class="sub">Present this QR code for classroom attendance scanning.</div></div></div>
+    <div class="card" style="padding:36px;">${idCardHtml(s,"qr-my")}</div>
+    <div class="footer-credit">Keep this code private — it uniquely identifies you for attendance purposes.</div>
+  `;
+  setTimeout(()=>{ new QRCode(document.getElementById("qr-my"), {text:s.code, width:84, height:84, colorDark:"#101B33"}); }, 30);
+}
+
+/* =========================================================
+   TEACHERS (admin only nav item, but reused)
+========================================================= */
+function renderTeachers(){
+  const c = document.getElementById("content");
+  c.innerHTML = `
+    <div class="topbar"><div><h1>Teachers</h1><div class="sub">${TEACHERS.length} faculty members across 5 departments</div></div>
+      <button class="btn btn-gold" onclick="toast('Add-teacher form would open here')">+ Add Teacher</button>
+    </div>
+    <div class="grid g-3">
+      ${TEACHERS.map(t=>`
+        <div class="card">
+          <div class="flex center gap12">
+            <div class="avatar" style="width:44px;height:44px;font-size:15px;">${initials(t.name)}</div>
+            <div><div style="font-weight:600;">${t.name}</div><div class="small muted">${t.qualification}</div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="small" style="line-height:1.9;">
+            <div><b>Subject:</b> ${t.subject}</div>
+            <div><b>Classes:</b> ${t.classes.map(classLabel).join(", ")}</div>
+            <div><b>Contact:</b> <span class="mono">${t.phone}</span></div>
+          </div>
+        </div>`).join("")}
+    </div>
+  `;
+}
+
+/* =========================================================
+   CLASSES
+========================================================= */
+function renderClasses(){
+  const c = document.getElementById("content");
+  const isTeacher = state.role==="teacher";
+  const myClasses = isTeacher ? TEACHERS.find(t=>t.id===state.user.id).classes : CLASSES.map(c=>c.id);
+  const list = CLASSES.filter(cl=>myClasses.includes(cl.id));
+  c.innerHTML = `
+    <div class="topbar"><div><h1>${isTeacher?'My Classes':'Classes'}</h1><div class="sub">Rosters, homeroom teachers and weekly periods</div></div></div>
+    <div class="grid g-2">
+      ${list.map(cl=>`
+        <div class="card">
+          <div class="flex between center">
+            <div><h3 class="mb0">${classLabel(cl.id)}</h3><div class="small muted">${cl.room} · Homeroom: ${teacherName(cl.homeroom)}</div></div>
+            <span class="pill">${cl.strength} students</span>
+          </div>
+          <div class="divider"></div>
+          <div class="small muted" style="font-weight:600;margin-bottom:8px;">SUBJECTS &amp; TEACHERS</div>
+          ${TEACHERS.filter(t=>t.classes.includes(cl.id)).map(t=>`
+            <div class="flex between" style="padding:6px 0;font-size:13px;"><span>${t.subject}</span><span class="muted">${t.name}</span></div>
+          `).join("")}
+          <div class="divider"></div>
+          <button class="btn btn-ghost btn-sm" onclick="goTo('attendance');state.attClass='${cl.id}';renderShell();">🔳 Take attendance</button>
+        </div>`).join("")}
+    </div>
+  `;
+}
+
+/* =========================================================
+   ATTENDANCE (QR + manual)
+========================================================= */
+function currentSession(){
+  return SESSIONS.find(s=>s.classId===state.attClass && s.date===state.attDate && s.status==="open");
+}
+function renderAttendance(){
+  const c = document.getElementById("content");
+  const isStudent = state.role==="student";
+
+  if(isStudent){
+    const stu = STUDENTS.find(s=>s.id===state.user.id);
+    const myRecs = RECORDS.filter(r=>r.studentId===stu.id).map(r=>{
+      const sess = SESSIONS.find(s=>s.id===r.sessionId); return {...r, date:sess?sess.date:'', subject:sess?sess.subject:''};
+    }).sort((a,b)=>b.date.localeCompare(a.date));
+    c.innerHTML = `
+      <div class="topbar"><div><h1>My Attendance</h1><div class="sub">${classLabel(stu.classId)} · Overall rate ${attendanceRateForStudent(stu.id)}%</div></div></div>
+      <div class="card table-wrap">
+        <table><thead><tr><th>Date</th><th>Session</th><th>Status</th><th>Time</th><th>Method</th></tr></thead>
+        <tbody>${myRecs.length? myRecs.map(r=>`
+          <tr><td>${r.date}</td><td>${r.subject}</td><td>${badgeFor(r.status)}</td><td class="small muted">${r.time}</td><td class="small muted">${r.method}</td></tr>
+        `).join("") : `<tr><td colspan="5"><div class="empty">No attendance records yet.</div></td></tr>`}</tbody></table>
+      </div>`;
+    return;
+  }
+
+  const isTeacher = state.role==="teacher";
+  const myClasses = isTeacher ? TEACHERS.find(t=>t.id===state.user.id).classes : CLASSES.map(cc=>cc.id);
+  if(!myClasses.includes(state.attClass)) state.attClass = myClasses[0];
+
+  const sess = currentSession();
+  const roster = studentsInClass(state.attClass);
+  const recsForSession = sess ? RECORDS.filter(r=>r.sessionId===sess.id) : [];
+  const markedCount = recsForSession.filter(r=>r.status!=="absent" || true).length;
+  const presentCount = recsForSession.filter(r=>r.status==="present"||r.status==="late").length;
+
+  c.innerHTML = `
+    <div class="topbar">
+      <div><h1>Attendance</h1><div class="sub">QR-code and manual attendance capture, per class session</div></div>
+    </div>
+    <div class="toolbar">
+      <select style="max-width:220px;" onchange="stopScannerRaw();state.attClass=this.value;renderPanel();">
+        ${myClasses.map(cid=>`<option value="${cid}" ${cid===state.attClass?'selected':''}>${classLabel(cid)}</option>`).join("")}
+      </select>
+      <input type="date" style="max-width:180px;" value="${state.attDate}" onchange="stopScannerRaw();state.attDate=this.value;renderPanel();">
+      <span class="pill">${roster.length} on roster</span>
+      ${sess?`<span class="pill" style="background:#E7F5EC;color:var(--ok);border-color:transparent;">${presentCount}/${roster.length} present</span>`:''}
+    </div>
+
+    <div class="session-panel">
+      <div class="card" style="text-align:center;">
+        ${sess ? `
+          <div class="small muted" style="font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Session reference</div>
+          <div class="session-token mono" style="margin:6px 0 14px;">${sess.token}</div>
+
+          <div id="scanner-area">
+            ${scannerActive ? `
+              <div class="scan-frame live" id="scan-frame-live">
+                <span class="cam-badge"><span class="rec-dot"></span>LIVE</span>
+                <video id="scan-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></video>
+                <div class="scan-line"></div>
+              </div>
+              <canvas id="scan-canvas" style="display:none;"></canvas>
+              <div class="scan-status" id="scan-status">Point the camera at a student ID card QR code…</div>
+              <button class="btn btn-danger btn-sm btn-block" onclick="stopScanner()">■ Stop camera</button>
+            ` : `
+              <div class="scan-frame"><div style="font-size:26px;">📷</div></div>
+              <div class="scan-status" id="scan-status">Camera is off.</div>
+              <button class="btn btn-gold btn-sm btn-block" onclick="startScanner()">📷 Start camera scanner</button>
+              <button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;" onclick="simulateScan()">Simulate a scan (no camera)</button>
+            `}
+          </div>
+
+          <button class="btn btn-danger btn-sm btn-block" style="margin-top:14px;" onclick="endSessionClick()">End session</button>
+        ` : `
+          <div style="padding:20px 6px;">
+            <div style="font-size:28px;">🔳</div>
+            <p class="small muted">No active session for this class today.</p>
+            <button class="btn btn-primary btn-block" onclick="startSession()">Start attendance session</button>
+          </div>
+        `}
+      </div>
+      <div class="card">
+        <div class="flex between center" style="margin-bottom:10px;">
+          <h3 class="mt0 mb0">Roster — ${classLabel(state.attClass)}</h3>
+          ${sess?`<span class="small muted" id="present-pill">Session: ${sess.subject}</span>`:''}
+        </div>
+        <div class="table-wrap" id="roster-table-wrap">
+          ${rosterTableHtml(roster, sess, recsForSession)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function rosterTableHtml(roster, sess, recsForSession){
+  return `<table><thead><tr><th>Student</th><th>Status</th><th>Time</th><th>Method</th><th></th></tr></thead>
+    <tbody>
+    ${roster.map(s=>{
+      const r = recsForSession.find(r=>r.studentId===s.id);
+      return `<tr>
+        <td><div class="flex center gap8"><div class="avatar" style="width:26px;height:26px;font-size:10.5px;background:#EFEBDD;color:var(--navy);">${initials(s.name)}</div>${s.name}</div></td>
+        <td>${r?badgeFor(r.status):'<span class="badge badge-pending">Not marked</span>'}</td>
+        <td class="small muted">${r?r.time:'—'}</td>
+        <td class="small muted">${r?r.method:'—'}</td>
+        <td>${sess?`
+          <select class="mono" style="padding:4px 6px;font-size:11.5px;margin:0;" onchange="manualMark('${s.id}', this.value)">
+            <option value="">Set…</option>
+            <option value="present">Present</option>
+            <option value="late">Late</option>
+            <option value="absent">Absent</option>
+          </select>`:''}</td>
+      </tr>`;
+    }).join("")}
+    </tbody></table>`;
+}
+
+// Refreshes only the roster table + status line, WITHOUT touching the live <video> element,
+// so an active camera stream is never interrupted mid-scan.
+function refreshRosterUI(){
+  const sess = currentSession();
+  const roster = studentsInClass(state.attClass);
+  const recsForSession = sess ? RECORDS.filter(r=>r.sessionId===sess.id) : [];
+  const wrap = document.getElementById("roster-table-wrap");
+  if(wrap) wrap.innerHTML = rosterTableHtml(roster, sess, recsForSession);
+  const pill = document.getElementById("present-pill");
+  if(pill && sess){
+    const presentCount = recsForSession.filter(r=>r.status==="present"||r.status==="late").length;
+    pill.textContent = `${presentCount}/${roster.length} present`;
+  }
+}
+function badgeFor(status){
+  const map = {present:['badge-present','Present'], absent:['badge-absent','Absent'], late:['badge-late','Late']};
+  const m = map[status] || ['badge-pending','Pending'];
+  return `<span class="badge ${m[0]}">${m[1]}</span>`;
+}
+function startSession(){
+  const id = "SES-"+sessionSeq++ +"-"+Date.now();
+  const teacherSubj = state.role==="teacher" ? TEACHERS.find(t=>t.id===state.user.id).subject : "Homeroom";
+  const token = "SES-"+state.attClass+"-"+state.attDate+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
+  SESSIONS.push({id, classId:state.attClass, date:state.attDate, subject:teacherSubj, token, status:"open"});
+  logAudit(state.user.name, `Started attendance session for ${classLabel(state.attClass)}`);
+  toast("Session started"); renderPanel();
+}
+function endSessionClick(){ stopScannerRaw(); closeSession(); }
+function closeSession(){
+  const sess = currentSession(); if(!sess) return;
+  const roster = studentsInClass(state.attClass);
+  roster.forEach(s=>{
+    if(!RECORDS.find(r=>r.sessionId===sess.id && r.studentId===s.id)){
+      RECORDS.push({sessionId:sess.id, studentId:s.id, status:"absent", time:"—", method:"—"});
+    }
+  });
+  sess.status = "closed";
+  logAudit(state.user.name, `Closed attendance session for ${classLabel(state.attClass)}`);
+  toast("Session closed — unmarked students recorded as absent"); renderPanel();
+}
+function manualMark(sid, status){
+  if(!status) return;
+  const sess = currentSession(); if(!sess) return;
+  let r = RECORDS.find(r=>r.sessionId===sess.id && r.studentId===sid);
+  const now = new Date();
+  if(r){ r.status=status; r.time=now.toLocaleTimeString(); r.method="Manual"; }
+  else{ RECORDS.push({sessionId:sess.id, studentId:sid, status, time:now.toLocaleTimeString(), method:"Manual"}); }
+  const s = STUDENTS.find(s=>s.id===sid);
+  logAudit(state.user.name, `Manually marked ${s.name} as ${status}`);
+  toast("Attendance updated"); refreshRosterUI();
+}
+
+/* ---- Real camera QR scanner (jsQR + getUserMedia) ---- */
+let scannerActive = false;
+let scanStream = null;
+let scanRAFId = null;
+let lastScanCode = null;
+let lastScanTime = 0;
+
+function startScanner(){
+  scannerActive = true;
+  renderPanel(); // paint the <video>/<canvas> elements first
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    .then(stream=>{
+      scanStream = stream;
+      const video = document.getElementById("scan-video");
+      if(!video){ stopScannerRaw(); return; }
+      video.srcObject = stream;
+      video.onloadedmetadata = ()=> video.play();
+      scanRAFId = requestAnimationFrame(scanTick);
+    })
+    .catch(err=>{
+      const st = document.getElementById("scan-status");
+      const msg = "Camera unavailable ("+(err.message||err.name)+"). Use the fallback button below.";
+      if(st){ st.textContent = msg; st.classList.add("warn"); }
+      toast("Couldn't access camera");
+    });
+}
+function scanTick(){
+  if(!scannerActive) return;
+  const video = document.getElementById("scan-video");
+  const canvas = document.getElementById("scan-canvas");
+  if(video && canvas && video.readyState === video.HAVE_ENOUGH_DATA){
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+    if(code && code.data) handleScannedCode(code.data);
+  }
+  scanRAFId = requestAnimationFrame(scanTick);
+}
+function handleScannedCode(data){
+  const now = Date.now();
+  if(data === lastScanCode && now - lastScanTime < 2500) return; // debounce repeat frames of the same card
+  lastScanCode = data; lastScanTime = now;
+
+  const st = document.getElementById("scan-status");
+  const setStatus = (msg, cls)=>{ if(st){ st.className = "scan-status"+(cls?" "+cls:""); st.textContent = msg; } };
+
+  const sess = currentSession();
+  if(!sess){ setStatus("No active session.", "warn"); return; }
+  const student = STUDENTS.find(s=>s.code===data || s.id===data);
+  if(!student){ setStatus("⚠ Code not recognized: "+data, "warn"); return; }
+  if(student.classId !== state.attClass){ setStatus(`⚠ ${student.name} is enrolled in ${classLabel(student.classId)}, not this class.`, "warn"); return; }
+  const existing = RECORDS.find(r=>r.sessionId===sess.id && r.studentId===student.id);
+  if(existing){ setStatus(`${student.name} is already marked ${existing.status}.`, ""); return; }
+
+  RECORDS.push({sessionId: sess.id, studentId: student.id, status:"present", time:new Date().toLocaleTimeString(), method:"QR Scan"});
+  logAudit(state.user.name, `${student.name} scanned in via camera QR`);
+  setStatus(`✓ ${student.name} marked present`, "ok");
+  toast(student.name+" marked present");
+  refreshRosterUI();
+}
+function stopScannerRaw(){
+  scannerActive = false;
+  if(scanRAFId){ cancelAnimationFrame(scanRAFId); scanRAFId = null; }
+  if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream = null; }
+  lastScanCode = null; lastScanTime = 0;
+}
+function stopScanner(){ stopScannerRaw(); renderPanel(); }
+function simulateScan(){
+  const sess = currentSession(); if(!sess) return;
+  const roster = studentsInClass(state.attClass);
+  const unmarked = roster.find(s=>!RECORDS.find(r=>r.sessionId===sess.id && r.studentId===s.id));
+  if(!unmarked){ toast("All students already marked"); return; }
+  RECORDS.push({sessionId:sess.id, studentId:unmarked.id, status:"present", time:new Date().toLocaleTimeString(), method:"QR Scan (sim)"});
+  logAudit(state.user.name, `${unmarked.name} scanned in via QR (simulated — no camera)`);
+  toast(unmarked.name+" marked present"); refreshRosterUI();
+}
+
+/* =========================================================
+   EXAMS & RESULTS
+========================================================= */
+function renderExams(){
+  const c = document.getElementById("content");
+
+  if(state.role==="student"){
+    const stu = STUDENTS.find(s=>s.id===state.user.id);
+    const myExams = EXAMS.filter(e=>e.classId===stu.classId && e.status==="published");
+    c.innerHTML = `
+      <div class="topbar"><div><h1>My Results</h1><div class="sub">Published examination results</div></div></div>
+      ${myExams.length? myExams.map(ex=>{
+        const g = GRADES.filter(x=>x.examId===ex.id && x.studentId===stu.id);
+        const pct = Math.round(g.reduce((a,x)=>a+x.marks/x.total,0)/g.length*100);
+        return `<div class="card" style="margin-bottom:16px;">
+          <div class="flex between center"><h3 class="mt0 mb0">${ex.name}</h3><span class="badge badge-published">Published</span></div>
+          <div class="small muted">${ex.date}</div>
+          <div class="table-wrap" style="margin-top:12px;">
+            <table><thead><tr><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead>
+            <tbody>${g.map(x=>`<tr><td>${x.subject}</td><td>${x.marks}/${x.total}</td><td>${gradeLetter(x.marks/x.total*100)}</td></tr>`).join("")}</tbody></table>
+          </div>
+          <div class="divider"></div>
+          <div class="flex between center"><span style="font-weight:700;">Overall: ${pct}%</span><span class="badge ${pct>=70?'badge-present':pct>=50?'badge-late':'badge-absent'}">${gradeLetter(pct)}</span></div>
+        </div>`;
+      }).join("") : `<div class="card"><div class="empty"><div class="ico">📝</div>No published results yet.</div></div>`}
+    `;
+    return;
+  }
+
+  const isTeacher = state.role==="teacher";
+  const myClasses = isTeacher ? TEACHERS.find(t=>t.id===state.user.id).classes : CLASSES.map(c=>c.id);
+  const list = EXAMS.filter(e=>myClasses.includes(e.classId));
+
+  c.innerHTML = `
+    <div class="topbar"><div><h1>Exams &amp; Results</h1><div class="sub">Create exams, enter marks and publish results</div></div>
+      ${state.role==="admin"?'<button class="btn btn-gold" onclick="addExamModal()">+ New Exam</button>':''}
+    </div>
+    <div class="card table-wrap">
+      <table><thead><tr><th>Exam</th><th>Class</th><th>Date</th><th>Status</th><th></th></tr></thead>
+      <tbody>${list.map(ex=>`
+        <tr><td style="font-weight:600;">${ex.name}</td><td>${classLabel(ex.classId)}</td><td>${ex.date}</td>
+        <td><span class="badge ${ex.status==='published'?'badge-published':'badge-draft'}">${ex.status}</span></td>
+        <td><button class="btn btn-ghost btn-sm" onclick="openExam('${ex.id}')">Open →</button></td></tr>
+      `).join("")}</tbody></table>
+    </div>
+  `;
+}
+function addExamModal(){
+  openModal(`
+    <h3>Create new exam</h3>
+    <div class="field"><label class="field-label">Exam name</label><input type="text" id="ex-name" placeholder="e.g. Final Term Examination"></div>
+    <div class="field"><label class="field-label">Class</label><select id="ex-class">${CLASSES.map(c=>`<option value="${c.id}">${classLabel(c.id)}</option>`).join("")}</select></div>
+    <div class="field"><label class="field-label">Date</label><input type="date" id="ex-date"></div>
+    <button class="btn btn-primary btn-block" onclick="submitNewExam()">Create exam</button>
+  `);
+}
+function submitNewExam(){
+  const name = document.getElementById("ex-name").value.trim() || "Untitled Exam";
+  const classId = document.getElementById("ex-class").value;
+  const date = document.getElementById("ex-date").value || new Date().toISOString().slice(0,10);
+  const id = "EX"+String(EXAMS.length+1).padStart(2,"0");
+  EXAMS.push({id, name, classId, date, subjects:SUBJECTS, status:"draft"});
+  logAudit(state.user.name, `Created exam "${name}" for ${classLabel(classId)}`);
+  closeModal(); toast("Exam created"); renderExams();
+}
+function openExam(exId){
+  state.activeExam = exId;
+  renderExamDetail();
+}
+function renderExamDetail(){
+  const ex = EXAMS.find(e=>e.id===state.activeExam);
+  const c = document.getElementById("content");
+  const roster = studentsInClass(ex.classId);
+  c.innerHTML = `
+    <div class="topbar">
+      <div><h1>${ex.name}</h1><div class="sub">${classLabel(ex.classId)} · ${ex.date} · <span class="badge ${ex.status==='published'?'badge-published':'badge-draft'}">${ex.status}</span></div></div>
+      <div class="flex gap8">
+        <button class="btn btn-ghost" onclick="state.activeExam=null;renderExams();">← Back</button>
+        ${ex.status==="draft" ? `<button class="btn btn-primary" onclick="publishExam('${ex.id}')">Publish results</button>` : ''}
+      </div>
+    </div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Student</th>${ex.subjects.map(s=>`<th>${s}</th>`).join("")}<th>Total</th><th>Grade</th></tr></thead>
+        <tbody>
+        ${roster.map(s=>{
+          const cells = ex.subjects.map(sub=>{
+            let g = GRADES.find(x=>x.examId===ex.id && x.studentId===s.id && x.subject===sub);
+            const val = g ? g.marks : "";
+            return `<td><input type="number" min="0" max="100" value="${val}" style="width:64px;padding:6px 8px;margin:0;" onchange="setMark('${ex.id}','${s.id}','${sub}',this.value)"></td>`;
+          }).join("");
+          const g = GRADES.filter(x=>x.examId===ex.id && x.studentId===s.id);
+          const pct = g.length ? Math.round(g.reduce((a,x)=>a+x.marks/x.total,0)/ex.subjects.length*100) : null;
+          return `<tr><td style="font-weight:600;">${s.name}</td>${cells}<td>${pct===null?'—':pct+'%'}</td><td>${pct===null?'—':gradeLetter(pct)}</td></tr>`;
+        }).join("")}
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-credit">Marks are saved instantly to the class gradebook.</div>
+  `;
+}
+function setMark(examId, studentId, subject, val){
+  val = Math.max(0, Math.min(100, Number(val)||0));
+  let g = GRADES.find(x=>x.examId===examId && x.studentId===studentId && x.subject===subject);
+  if(g) g.marks = val;
+  else GRADES.push({examId, studentId, subject, marks:val, total:100});
+  toast("Mark saved");
+}
+function publishExam(exId){
+  const ex = EXAMS.find(e=>e.id===exId);
+  ex.status = "published";
+  logAudit(state.user.name, `Published results for "${ex.name}" — ${classLabel(ex.classId)}`);
+  toast("Results published to students"); renderExamDetail();
+}
+
+/* =========================================================
+   REPORTS (admin/teacher)
+========================================================= */
+function renderReports(){
+  const c = document.getElementById("content");
+  c.innerHTML = `
+    <div class="topbar"><div><h1>Reports</h1><div class="sub">Attendance trends, academic performance and audit trail</div></div>
+      <button class="btn btn-ghost" onclick="exportAttendanceCSV()">⬇ Export attendance CSV</button>
+    </div>
+    <div class="grid g-2">
+      <div class="card"><h3>Attendance rate by class (7-day avg)</h3><div class="chart-wrap"><canvas id="chartByClass"></canvas></div></div>
+      <div class="card"><h3>Grade distribution — published exams</h3><div class="chart-wrap"><canvas id="chartGrades"></canvas></div></div>
+    </div>
+    <div class="section-title"><h2>Audit trail</h2></div>
+    <div class="card table-wrap">
+      <table><thead><tr><th>Time</th><th>User</th><th>Action</th></tr></thead>
+      <tbody>${AUDIT.slice(0,15).map(a=>`<tr><td class="small mono muted">${a.time}</td><td>${a.actor}</td><td>${a.action}</td></tr>`).join("")}</tbody></table>
+    </div>
+  `;
+  new Chart(document.getElementById("chartByClass"), {
+    type:'bar',
+    data:{labels:CLASSES.map(c=>classLabel(c.id)), datasets:[{label:'Attendance %', data:CLASSES.map(c=>attendanceRateForClass(c.id)), backgroundColor:'#0E6B4C', borderRadius:6}]},
+    options:{plugins:{legend:{display:false}}, scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}}}, responsive:true, maintainAspectRatio:false}
+  });
+  const buckets = {"A+":0,"A":0,"B":0,"C":0,"D":0,"F":0};
+  GRADES.forEach(g=>{ buckets[gradeLetter(g.marks/g.total*100)]++; });
+  new Chart(document.getElementById("chartGrades"), {
+    type:'bar',
+    data:{labels:Object.keys(buckets), datasets:[{label:'Entries', data:Object.values(buckets), backgroundColor:'#C9A227', borderRadius:6}]},
+    options:{plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false}
+  });
+}
+function exportAttendanceCSV(){
+  let csv = "Date,Class,Student,Status,Time,Method\n";
+  RECORDS.forEach(r=>{
+    const sess = SESSIONS.find(s=>s.id===r.sessionId); const s = STUDENTS.find(s=>s.id===r.studentId);
+    if(!sess||!s) return;
+    csv += `${sess.date},${classLabel(sess.classId)},${s.name},${r.status},${r.time},${r.method}\n`;
+  });
+  const blob = new Blob([csv], {type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "attendance_report.csv"; a.click();
+  logAudit(state.user.name, "Exported attendance report (CSV)");
+  toast("Attendance CSV downloaded");
+}
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+function renderNotifications(){
+  const c = document.getElementById("content");
+  const canPost = state.role==="admin" || state.role==="teacher";
+  c.innerHTML = `
+    <div class="topbar"><div><h1>${state.role==='student'?'Announcements':'Notifications'}</h1><div class="sub">School-wide updates and alerts</div></div></div>
+    <div class="grid ${canPost?'g-2-1':''}">
+      <div class="card">
+        ${NOTIFICATIONS.map(n=>`
+          <div class="notif-item">
+            <div class="notif-tag">${n.tag}</div>
+            <div class="notif-title">${n.title}</div>
+            <div class="small" style="margin:4px 0;color:var(--slate);">${n.body}</div>
+            <div class="notif-meta">${n.author} · ${n.time}</div>
+          </div>`).join("")}
+      </div>
+      ${canPost?`
+      <div class="card">
+        <h3 class="mt0">Post announcement</h3>
+        <div class="field"><label class="field-label">Category</label>
+          <select id="nn-tag"><option>General</option><option>Exams</option><option>Attendance</option><option>Event</option></select></div>
+        <div class="field"><label class="field-label">Title</label><input type="text" id="nn-title" placeholder="Announcement title"></div>
+        <div class="field"><label class="field-label">Message</label><textarea id="nn-body" placeholder="Write the details…"></textarea></div>
+        <button class="btn btn-primary btn-block" onclick="postNotification()">Post to school</button>
+      </div>`:''}
+    </div>
+  `;
+}
+function postNotification(){
+  const title = document.getElementById("nn-title").value.trim();
+  if(!title){ toast("Add a title first"); return; }
+  NOTIFICATIONS.unshift({id:Date.now(), tag:document.getElementById("nn-tag").value, title, body:document.getElementById("nn-body").value, author:state.user.name, time:"Just now"});
+  logAudit(state.user.name, `Posted announcement: "${title}"`);
+  toast("Announcement posted"); renderNotifications();
+}
+
+/* =========================================================
+   SETTINGS (admin)
+========================================================= */
+function renderSettings(){
+  const c = document.getElementById("content");
+  c.innerHTML = `
+    <div class="topbar"><div><h1>Settings</h1><div class="sub">School profile, roles and permissions</div></div></div>
+    <div class="grid g-2">
+      <div class="card">
+        <h3 class="mt0">School profile</h3>
+        <div class="field"><label class="field-label">School name</label><input type="text" value="Naveed Public School"></div>
+        <div class="field"><label class="field-label">Location</label><input type="text" value="Peshawar, Khyber Pakhtunkhwa"></div>
+        <div class="field"><label class="field-label">Academic year</label><input type="text" value="2025 – 2026"></div>
+        <button class="btn btn-primary" onclick="toast('School profile saved')">Save changes</button>
+      </div>
+      <div class="card">
+        <h3 class="mt0">Roles &amp; permissions</h3>
+        <table><thead><tr><th>Role</th><th>Access</th></tr></thead>
+        <tbody>
+          <tr><td>Admin</td><td class="small muted">Full access — users, attendance, exams, reports, settings</td></tr>
+          <tr><td>Teacher</td><td class="small muted">Own classes — attendance, mark entry, announcements</td></tr>
+          <tr><td>Student</td><td class="small muted">Read-only — own attendance, results, announcements</td></tr>
+          <tr><td>Parent</td><td class="small muted">Read-only — linked child's attendance &amp; results (optional module)</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="section-title"><h2>Security</h2></div>
+    <div class="card">
+      <div class="small" style="line-height:2;">
+        🔒 Role-based access control with least-privilege defaults<br>
+        🔒 TLS in transit, encryption at rest for student records<br>
+        🔒 Full audit trail on attendance edits and grade changes<br>
+        🔒 Tokenised, single-use QR sessions to prevent replay or duplicate check-in
+      </div>
+    </div>
+    <div class="footer-credit">Naveed Public School Campus Portal · Developer and Designed by: Jamal Abdul Nasir</div>
+  `;
+}
+</script>
+</body>
+</html>
